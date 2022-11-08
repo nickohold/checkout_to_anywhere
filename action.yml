@@ -1,0 +1,25 @@
+name: 'Git Checkout To Anywhere'
+description: 'Checkout a repo to any path'
+inputs:
+  repository:
+    description: 'Repository to clone. Ex.: githubuser/repo'
+    required: true
+  path:
+    description: 'Path to clone the repo to. default is home dir ($HOME/)'
+    required: false
+    default: './'
+  ref:
+    description: 'Branch to clone'
+    required: false
+    default: ''
+  token:
+    description: 'Personal access token (PAT) used to fetch the repository.'
+    required: false
+    default: ''
+runs:
+  using: "composite"
+  steps:
+    - run: git clone $([[ -z "${{ inputs.ref }}"]] && echo "" || echo "-b ${{ inputs.ref }}") "https://$([[ -z '${{ inputs.token }}' ]] && echo '' || echo ${{ inputs.token }}'@')github.com/${{ inputs.repository }}.git" $HOME/
+      shell: bash
+    - run: echo "${{ github.action_path }}" >> $GITHUB_PATH
+      shell: bash
