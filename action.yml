@@ -23,15 +23,16 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - name: Setup SSH
+      uses: MrSquaare/ssh-setup-action@v1
+      with:
+          host: github.com
+          private-key: ${{ inputs.ssh-key }}
     - uses: actions/checkout@v3
       with:
         repository: ${{ inputs.repository }}
         ref: ${{ inputs.ref }}
         path: "_temp"
-        token: ${{ inputs.token }}
-        ssh-key: ${{ inputs.ssh-key }}
-    # - run: git clone $([[ -z "${{ inputs.ref }}" ]] && echo "" || echo "-b ${{ inputs.ref }}") "https://$([[ -z '${{ inputs.token }}' ]] && echo '' || echo ${{ inputs.token }}'@')github.com/${{ inputs.repository }}.git" ./_temp
-      # shell: bash
     - run: rm -rf ${{ inputs.path }} && mkdir -p ${{ inputs.path }} && mv $GITHUB_WORKSPACE/_temp/ ${{ inputs.path }}/
       shell: bash
     - run: echo "${{ github.action_path }}" >> $GITHUB_PATH
