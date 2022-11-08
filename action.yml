@@ -23,8 +23,7 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Setup SSH
-      uses: MrSquaare/ssh-setup-action@v1
+    - uses: MrSquaare/ssh-setup-action@v1
       with:
           host: github.com
           private-key: ${{ inputs.ssh-key }}
@@ -33,7 +32,7 @@ runs:
         repository: ${{ inputs.repository }}
         ref: ${{ inputs.ref }}
         path: "_temp"
-    - run: rm -rf ${{ inputs.path }} && mkdir -p ${{ inputs.path }} && mv $GITHUB_WORKSPACE/_temp/ ${{ inputs.path }}/
+    - run: rm -rf ${{ inputs.path }} && mkdir -p ${{ inputs.path }} && mv _temp/ ${{ inputs.path }}/
       shell: bash
     - run: echo "${{ github.action_path }}" >> $GITHUB_PATH
       shell: bash
