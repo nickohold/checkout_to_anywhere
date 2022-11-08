@@ -19,7 +19,9 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - run: git clone $([[ -z "${{ inputs.ref }}" ]] && echo "" || echo "-b ${{ inputs.ref }}") "https://$([[ -z '${{ inputs.token }}' ]] && echo '' || echo ${{ inputs.token }}'@')github.com/${{ inputs.repository }}.git" ${{ inputs.path }}
+    - run: git clone $([[ -z "${{ inputs.ref }}" ]] && echo "" || echo "-b ${{ inputs.ref }}") "https://$([[ -z '${{ inputs.token }}' ]] && echo '' || echo ${{ inputs.token }}'@')github.com/${{ inputs.repository }}.git" ${{ inputs.path }}_temp
+      shell: bash
+    - run: rm -rf ${{ inputs.path }} && mkdir -p ${{ inputs.path }} && mv ${{ inputs.path }}_temp ${{ inputs.path }}
       shell: bash
     - run: echo "${{ github.action_path }}" >> $GITHUB_PATH
       shell: bash
