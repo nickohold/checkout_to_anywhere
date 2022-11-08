@@ -5,9 +5,9 @@ inputs:
     description: 'Repository to clone. Ex.: githubuser/repo'
     required: true
   path:
-    description: 'Path to clone the repo to. default is home dir ($HOME/)'
+    description: 'Path to clone the repo to. default is home dir ($HOME)'
     required: false
-    default: './'
+    default: '$HOME'
   ref:
     description: 'Branch to clone'
     required: false
@@ -19,7 +19,7 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - run: git clone $([[ -z "${{ inputs.ref }}" ]] && echo "" || echo "-b ${{ inputs.ref }}") "https://$([[ -z '${{ inputs.token }}' ]] && echo '' || echo ${{ inputs.token }}'@')github.com/${{ inputs.repository }}.git" $HOME/
+    - run: git clone $([[ -z "${{ inputs.ref }}" ]] && echo "" || echo "-b ${{ inputs.ref }}") "https://$([[ -z '${{ inputs.token }}' ]] && echo '' || echo ${{ inputs.token }}'@')github.com/${{ inputs.repository }}.git" ${{ inputs.path }}
       shell: bash
     - run: echo "${{ github.action_path }}" >> $GITHUB_PATH
       shell: bash
